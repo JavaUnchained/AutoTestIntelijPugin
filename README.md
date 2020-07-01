@@ -1,6 +1,6 @@
 # autotest-plugin
 
-![Build](https://github.com/JavaUnchained/autotest-plugin/workflows/Build/badge.svg)
+![Build](https://github.com/JavaUnchained/AutoTestIntelijPugin/workflows/Build/badge.svg)
 
 <!-- Plugin description -->
 
