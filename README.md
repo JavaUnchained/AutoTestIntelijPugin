@@ -10,7 +10,7 @@
 ## Installation
   0. Need to have JDK 1.8 only.
   1. Change Intellij IDEA version to 2019 (or lower, 2019.3.4 is recommended);
-  2. Download the [latest release](https://github.com/JavaUnchained/autotest-plugin/releases/latest) and install it manually using
+  2. Download the [latest release](https://github.com/JavaUnchained/AutoTestIntelijPugin/releases/latest) and install it manually using
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>;
   3. Change Intellij IDEA runtime. You need install Runtime plugin and download JDK - Runtime version 1.8.0_252 -1649 relese amd64;
   4. Build *cmd-jbse* project or donwload compiled [JBSE JAR file](./all-in-one-jar-1.0-SNAPSHOT.jar);
