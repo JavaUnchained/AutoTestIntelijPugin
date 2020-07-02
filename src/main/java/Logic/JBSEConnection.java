@@ -29,6 +29,33 @@ public class JBSEConnection {
         this.testName = testName;
     }
 
+    public JBSEConnection() {
+    }
+
+    public void start() {
+        //    public String projectPath = "C:/Users/PC/Documents/1.Projects/TRPO/examplesJBSE/";
+//    public String methodDesc  = "(II)V";
+//    public String outputClass = "out/ArrayDemoTest1.java";
+//    public String methodName  = "entryPoint";
+//    public String testingClass = "smalldemos/array_3/ArrayDemo3";
+        String jarParam = jarPath;
+        String z3Param = " -z3_path " + z3Path;
+        String jreParam = " -jre " + jreSourcepath;
+        String jbseHomeParam = " -jbse_home " + jbseHome;
+        String testHomeParam = " -test_home " + "C:/Users/andre/IdeaProjects/jbse-examplesxuyna/";
+        String classParam = " -mc " + "smalldemos/array_3/ArrayDemo3";
+        String descriptParam = " -md " + "(II)V";
+        String methodNameParam = " -mn " + "entryPoint";
+        String nameOfTestParam = " -tn " + "out/ArrayDemoTest1.java";
+        Runtime re = Runtime.getRuntime();
+
+        try {
+            re.exec("java -jar " + jarParam + jbseHomeParam + z3Param + testHomeParam + classParam + descriptParam + methodNameParam + nameOfTestParam + jreParam);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
     public void start2(){
         String jarParam = jarPath;
         String jbseHomeParam = " -jbse_home " + jbseHome;

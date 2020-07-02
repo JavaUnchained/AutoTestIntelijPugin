@@ -11,9 +11,11 @@ public class SettingState {
 
     /* Часть, которую теперь плагин получает сам из текущего окружения*/
 //    public String projectPath = "C:/Users/PC/Documents/1.Projects/TRPO/examplesJBSE/";
-//    public String outputClass = "out/ArrayDemoTest1.java";
-//    public String testingClass = "smalldemos/array_3/ArrayDemo3";
-//    public String methodName  = "entryPoint";
 //    public String methodDesc  = "(II)V";
+//    public String outputClass = "out/ArrayDemoTest1.java";
+//    public String methodName  = "entryPoint";
+
+//    public String testingClass = "smalldemos/array_3/ArrayDemo3";
+
 
 }

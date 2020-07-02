@@ -29,13 +29,14 @@ public class DescExtractor {
     public DescExtractor(String projectPath, TypeBuild type) throws NotFoundException {
             String outDir = "";
             switch (type) {
+//                case CLA: outDir = "out/production/untitled1/";
                 case CLA: outDir = "out/";
                     break;
                 case MAVEN:
                     outDir = "target/classes/";
                     break;
                 case GRADLE:
-                    outDir = "build/classes";
+                    outDir = "build/classes/";
                     break;
             }
 
