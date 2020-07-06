@@ -28,7 +28,7 @@ public class SettingsPersist implements PersistentStateComponent<SettingState> {
     }
 
     @Override
-    public void loadState(@NotNull SettingState state) {
+    public void loadState(@NotNull final SettingState state) {
         settingState = state;
     }
 

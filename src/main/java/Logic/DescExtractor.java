@@ -3,9 +3,11 @@ package Logic;
 import javassist.ClassPool;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*Работаем с байткодом для получения дескрипторов и имён методов*/
@@ -20,44 +22,61 @@ public class DescExtractor {
 
     // Если файл класса находится по конкретному пути
     // C:\Users\andre\IdeaProjects\123\out\production\123\
-    public DescExtractor(String absolutePath) throws NotFoundException {
+    public DescExtractor(@NotNull final String absolutePath) throws NotFoundException {
         this.classPool = new ClassPool();
         classPool.insertClassPath(absolutePath);
     }
 
     // Если мы знаем только путь до нашего проекта, при том он на Maven/Gradle итд с разными названиями папок
-    public DescExtractor(String projectPath, TypeBuild type) throws NotFoundException {
-            String outDir = "";
+    public DescExtractor(@NotNull final String projectPath,
+                         @NotNull final String packagePath,
+                         @NotNull final String projectName,
+                         @NotNull final TypeBuild type) throws NotFoundException {
+            final StringBuilder outDir = new StringBuilder();
             switch (type) {
+<<<<<<< HEAD
 //                case CLA: outDir = "out/production/untitled1/";
                 case CLA: outDir = "out/";
+=======
+                case CLA:
+                    final String clazz = projectPath.substring(projectPath.lastIndexOf("/"));
+                    outDir.append("out/production/").append(projectName).append(packagePath);
+>>>>>>> tmp
                     break;
                 case MAVEN:
-                    outDir = "target/classes/";
+                    outDir.append("target/classes/").append(packagePath);
                     break;
                 case GRADLE:
+<<<<<<< HEAD
                     outDir = "build/classes/";
+=======
+                    outDir.append("build/classes/").append(packagePath);
+                    break;
+                case ECLIPSE:
+                    outDir.append("bin/").append(packagePath);
+>>>>>>> tmp
                     break;
             }
 
             this.classPool = new ClassPool();
-            classPool.insertClassPath(projectPath + outDir);
+            classPool.insertClassPath(projectPath + outDir.toString());
     }
 
     /**
      * @param className - имя класса который будем тестировать
      * @return ключь - название метода, значение - дескриптор
      */
-    public Map<String, String> getAllDescriptorAndMethodName(String className) throws NotFoundException {
-        Map<String, String> map = new HashMap<>();
-        CtMethod[] ctMethods = this.classPool.get(className).getDeclaredMethods();
+    public Map<String, String> getAllDescriptorAndMethodName(@NotNull final String className) throws NotFoundException {
+        final Map<String, String> map = new HashMap<>();
+        final CtMethod[] ctMethods = this.classPool.get(className).getDeclaredMethods();
         for (CtMethod method: ctMethods) {
             map.put(method.getName(), method.getSignature());
         }
         return map;
     }
 
-    public String getDescriptorOfOneMethod(String nameOfClass, String nameOfMethod) throws NotFoundException {
+    public String getDescriptorOfOneMethod(@NotNull final String nameOfClass,
+                                           @NotNull final String nameOfMethod) throws NotFoundException {
         return classPool.getMethod(nameOfClass, nameOfMethod).getSignature();
     }
 
@@ -65,17 +84,17 @@ public class DescExtractor {
      * list.get(0) - именна методов через запятую
      * list.get(1) - дескрипторы через запятую
      */
-    public ArrayList<String> getAllSplittedNameAndDec(String className) throws NotFoundException {
-        StringBuilder names = new StringBuilder();
-        StringBuilder descriptors = new StringBuilder();
-        CtMethod[] ctMethods = classPool.get(className).getDeclaredMethods();
+    public List<String> getAllSplittedNameAndDec(@NotNull final String className) throws NotFoundException {
+        final StringBuilder names = new StringBuilder();
+        final StringBuilder descriptors = new StringBuilder();
+        final CtMethod[] ctMethods = classPool.get(className).getDeclaredMethods();
         for (CtMethod method: ctMethods) {
             names.append(method.getName());
             names.append(",");
             descriptors.append(method.getSignature());
             descriptors.append(",");
         }
-        ArrayList<String> list = new ArrayList();
+        final List<String> list = new ArrayList<>();
         list.add(names.toString());
         list.add(descriptors.toString());
         return list;

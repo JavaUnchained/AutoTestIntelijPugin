@@ -1,5 +1,5 @@
 package Logic;
 
 public enum TypeBuild {
-    CLA, MAVEN, GRADLE
+    CLA, MAVEN, GRADLE, ECLIPSE
 }
