@@ -1,7 +1,6 @@
 package Settings;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.sun.istack.Nullable;
 import org.jetbrains.annotations.Nls;
@@ -42,7 +41,7 @@ public class SettingsConfig implements SearchableConfigurable {
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
         mGUI.apply();
     }
 

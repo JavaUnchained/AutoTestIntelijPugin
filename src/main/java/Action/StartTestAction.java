@@ -11,9 +11,10 @@ import com.intellij.openapi.vcs.VcsBundle;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import javassist.NotFoundException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static com.intellij.openapi.actionSystem.CommonDataKeys.VIRTUAL_FILE;
@@ -25,14 +26,14 @@ public class StartTestAction extends AnAction {
     private String projectPath;
     private String outputClass;
     private String testingClass;
-    private ArrayList<String> namesAndDescriptors;
+    private List<String> namesAndDescriptors;
 
     private static final String GEN_FOLDER_NAME = "GeneratedTest";
     private VirtualFile fileIndokedPopUpMenu;
     private VirtualFile pathToProject;
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(@NotNull final AnActionEvent e) {
         // Получаем файл по которому мы нажали ПКМ
         fileIndokedPopUpMenu = e.getData(VIRTUAL_FILE);
         // получаем путь до проекта
@@ -53,13 +54,21 @@ public class StartTestAction extends AnAction {
         }
         pathToProject.refresh(true,true);
 
-        String javaFileName = fileIndokedPopUpMenu.getName().replace(".java", "");
-        testingClass = fileIndokedPopUpMenu.getCanonicalPath().replace(projectPath+"src/main/java/", "");
+        final String javaFileName = fileIndokedPopUpMenu.getName().replace(".java", "");
+        testingClass = Objects.requireNonNull(fileIndokedPopUpMenu.getCanonicalPath())
+                .replace(projectPath + "src/main/java/", "");
         outputClass = "GeneratedTest/" + javaFileName + "Test.java";
+
+        final String[] temp = projectPath.split("/");
+        final String projectName = temp[temp.length - 1] + "/";
+
+        // Путь пакетов до целевого файла
+        final String tmp = testingClass.replace(projectPath + "src/", "");
+        final String packagePath = tmp.substring(0, tmp.lastIndexOf("/") + 1);
 
         // Получаем дескрипторы и имена методов
         try {
-            DescExtractor descExtractor = new DescExtractor(projectPath, typeOfProject());
+            final DescExtractor descExtractor = new DescExtractor(projectPath, packagePath, projectName, typeOfProject(packagePath, projectPath));
             namesAndDescriptors = descExtractor.getAllSplittedNameAndDec(javaFileName);
         } catch (NotFoundException notFoundException) {
             Messages.showMessageDialog("The corresponding .class file does not exist. Compile the project and try again.", "Error",
@@ -73,7 +82,7 @@ public class StartTestAction extends AnAction {
                 Messages.getInformationIcon());
     }
 
-    private void runJBSE(AnActionEvent e) {
+    private void runJBSE(@NotNull final AnActionEvent e) {
         jbseConnection = new JBSEConnection(projectPath, testingClass, namesAndDescriptors.get(1), namesAndDescriptors.get(0), outputClass);
         CommandProcessor.getInstance().executeCommand(e.getProject(), () -> {
             System.out.println("Starting generation");
@@ -82,7 +91,7 @@ public class StartTestAction extends AnAction {
         },  VcsBundle.message("command.name.open.error.message.view"), null);
     }
 
-    private void updateWhileNonVisible(AnActionEvent e) {
+    private void updateWhileNonVisible(@NotNull final AnActionEvent e) {
         VirtualFile virtualFile;
         do {
             try {
@@ -96,18 +105,20 @@ public class StartTestAction extends AnAction {
         } while (virtualFile == null);
     }
 
-    private TypeBuild typeOfProject() {
-        VirtualFile maven = LocalFileSystem.getInstance().findFileByPath(projectPath+"target/classes/");
-        VirtualFile gradle = LocalFileSystem.getInstance().findFileByPath(projectPath + "build/");
-        TypeBuild typeBuild;
+    private TypeBuild typeOfProject(@NotNull final String projectName,
+                                    @NotNull final String packagePath) {
+        final VirtualFile maven = LocalFileSystem.getInstance().findFileByPath(projectPath + "target/classes/" + packagePath);
+        final VirtualFile gradle = LocalFileSystem.getInstance().findFileByPath(projectPath + "build/classes/" + packagePath);
+        final VirtualFile cla = LocalFileSystem.getInstance().findFileByPath(projectPath + "out/production/" + projectName + packagePath);
 
         if (maven != null) {
-            typeBuild = TypeBuild.MAVEN;
+            return TypeBuild.MAVEN;
         } else if (gradle != null) {
-            typeBuild = TypeBuild.GRADLE;
+            return TypeBuild.GRADLE;
+        } else if (cla != null){
+            return TypeBuild.CLA;
         } else {
-            typeBuild = TypeBuild.CLA;
+            return TypeBuild.ECLIPSE;
         }
-        return typeBuild;
     }
 }
