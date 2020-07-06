@@ -32,34 +32,25 @@ public class DescExtractor {
                          @NotNull final String packagePath,
                          @NotNull final String projectName,
                          @NotNull final TypeBuild type) throws NotFoundException {
-            final StringBuilder outDir = new StringBuilder();
-            switch (type) {
-<<<<<<< HEAD
-//                case CLA: outDir = "out/production/untitled1/";
-                case CLA: outDir = "out/";
-=======
-                case CLA:
-                    final String clazz = projectPath.substring(projectPath.lastIndexOf("/"));
-                    outDir.append("out/production/").append(projectName).append(packagePath);
->>>>>>> tmp
-                    break;
-                case MAVEN:
-                    outDir.append("target/classes/").append(packagePath);
-                    break;
-                case GRADLE:
-<<<<<<< HEAD
-                    outDir = "build/classes/";
-=======
-                    outDir.append("build/classes/").append(packagePath);
-                    break;
-                case ECLIPSE:
-                    outDir.append("bin/").append(packagePath);
->>>>>>> tmp
-                    break;
-            }
+        final StringBuilder outDir = new StringBuilder();
+        switch (type) {
+            case CLA:
+                final String clazz = projectPath.substring(projectPath.lastIndexOf("/"));
+                outDir.append("out/production/").append(projectName).append(packagePath);
+                break;
+            case MAVEN:
+                outDir.append("target/classes/").append(packagePath);
+                break;
+            case GRADLE:
+                outDir.append("build/classes/").append(packagePath);
+                break;
+            case ECLIPSE:
+                outDir.append("bin/").append(packagePath);
+                break;
+        }
 
-            this.classPool = new ClassPool();
-            classPool.insertClassPath(projectPath + outDir.toString());
+        this.classPool = new ClassPool();
+        classPool.insertClassPath(projectPath + outDir.toString());
     }
 
     /**
@@ -100,3 +91,4 @@ public class DescExtractor {
         return list;
     }
 }
+
