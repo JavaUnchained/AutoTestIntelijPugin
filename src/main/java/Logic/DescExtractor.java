@@ -35,7 +35,6 @@ public class DescExtractor {
         final StringBuilder outDir = new StringBuilder();
         switch (type) {
             case CLA:
-                final String clazz = projectPath.substring(projectPath.lastIndexOf("/"));
                 outDir.append("out/production/").append(projectName).append(packagePath);
                 break;
             case MAVEN:

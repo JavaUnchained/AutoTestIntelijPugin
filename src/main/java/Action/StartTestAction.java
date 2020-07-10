@@ -68,7 +68,7 @@ public class StartTestAction extends AnAction {
 
         // Получаем дескрипторы и имена методов
         try {
-            final DescExtractor descExtractor = new DescExtractor(projectPath, packagePath, projectName, typeOfProject(packagePath, projectPath));
+            final DescExtractor descExtractor = new DescExtractor(projectPath, packagePath, projectName, typeOfProject(projectName, packagePath));
             namesAndDescriptors = descExtractor.getAllSplittedNameAndDec(javaFileName);
         } catch (NotFoundException notFoundException) {
             Messages.showMessageDialog("The corresponding .class file does not exist. Compile the project and try again.", "Error",
