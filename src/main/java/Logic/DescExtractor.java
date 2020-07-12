@@ -31,6 +31,7 @@ public class DescExtractor {
     public DescExtractor(@NotNull final String projectPath,
                          @NotNull final String packagePath,
                          @NotNull final String projectName,
+                         @NotNull final String javaFileName,
                          @NotNull final TypeBuild type) throws NotFoundException {
         final StringBuilder outDir = new StringBuilder();
         switch (type) {

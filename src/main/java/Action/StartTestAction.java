@@ -29,13 +29,12 @@ public class StartTestAction extends AnAction {
     private List<String> namesAndDescriptors;
 
     private static final String GEN_FOLDER_NAME = "GeneratedTest";
-    private VirtualFile fileIndokedPopUpMenu;
     private VirtualFile pathToProject;
 
     @Override
     public void actionPerformed(@NotNull final AnActionEvent e) {
         // Получаем файл по которому мы нажали ПКМ
-        fileIndokedPopUpMenu = e.getData(VIRTUAL_FILE);
+        VirtualFile fileIndokedPopUpMenu = e.getData(VIRTUAL_FILE);
         // получаем путь до проекта
         projectPath = Objects.requireNonNull(e.getProject()).getBasePath() + "/";
 
@@ -54,7 +53,7 @@ public class StartTestAction extends AnAction {
         }
         pathToProject.refresh(true,true);
 
-        final String javaFileName = fileIndokedPopUpMenu.getName().replace(".java", "");
+        final String javaFileName = Objects.requireNonNull(fileIndokedPopUpMenu).getName().replace(".java", "");
         testingClass = Objects.requireNonNull(fileIndokedPopUpMenu.getCanonicalPath())
                 .replace(projectPath + "src/main/java/", "");
         outputClass = "GeneratedTest/" + javaFileName + "Test.java";
@@ -68,13 +67,14 @@ public class StartTestAction extends AnAction {
 
         // Получаем дескрипторы и имена методов
         try {
-            final DescExtractor descExtractor = new DescExtractor(projectPath, packagePath, projectName, typeOfProject(projectName, packagePath));
+            final DescExtractor descExtractor = new DescExtractor(projectPath, packagePath, projectName, javaFileName, typeOfProject(projectName, packagePath));
             namesAndDescriptors = descExtractor.getAllSplittedNameAndDec(javaFileName);
         } catch (NotFoundException notFoundException) {
             Messages.showMessageDialog("The corresponding .class file does not exist. Compile the project and try again.", "Error",
                     Messages.getInformationIcon());
         }
 
+        final String newPackage = packagePath.replace("/", ".");
         runJBSE(e);
         updateWhileNonVisible(e);
 

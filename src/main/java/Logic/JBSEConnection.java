@@ -3,6 +3,7 @@ package Logic;
 import Settings.SettingState;
 import Settings.SettingsPersist;
 import com.intellij.openapi.components.PersistentStateComponent;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -10,16 +11,16 @@ import java.util.Objects;
 public class JBSEConnection {
 
     PersistentStateComponent<SettingState> state = new SettingsPersist().getInstance();
-    private String jbseHome = Objects.requireNonNull(state.getState()).jbseHome;
-    private String z3Path = Objects.requireNonNull(state.getState()).z3Path;
-    private String jreSourcepath = Objects.requireNonNull(state.getState().jdkPath);
-    private String jarPath = Objects.requireNonNull(state.getState().jarJBSEpath);
+    private final String jbseHome = Objects.requireNonNull(state.getState()).jbseHome;
+    private final String z3Path = Objects.requireNonNull(state.getState()).z3Path;
+    private final String jreSourcepath = Objects.requireNonNull(state.getState().jdkPath);
+    private final String jarPath = Objects.requireNonNull(state.getState().jarJBSEpath);
 
-    private String testHome;
-    private String methodClass;
-    private String methodDescriptor;
-    private String methodName;
-    private String testName;
+    private final String testHome;
+    private final String methodClass;
+    private final String methodDescriptor;
+    private final String methodName;
+    private final String testName;
 
     public JBSEConnection(String testHome, String methodClass, String methodDescriptor, String methodName, String testName) {
         this.testHome = testHome;
@@ -29,47 +30,43 @@ public class JBSEConnection {
         this.testName = testName;
     }
 
-    public JBSEConnection() {
-    }
-
     public void start() {
         //    public String projectPath = "C:/Users/PC/Documents/1.Projects/TRPO/examplesJBSE/";
 //    public String methodDesc  = "(II)V";
 //    public String outputClass = "out/ArrayDemoTest1.java";
 //    public String methodName  = "entryPoint";
 //    public String testingClass = "smalldemos/array_3/ArrayDemo3";
-        String jarParam = jarPath;
-        String z3Param = " -z3_path " + z3Path;
-        String jreParam = " -jre " + jreSourcepath;
-        String jbseHomeParam = " -jbse_home " + jbseHome;
-        String testHomeParam = " -test_home " + "C:/Users/andre/IdeaProjects/jbse-examplesxuyna/";
-        String classParam = " -mc " + "smalldemos/array_3/ArrayDemo3";
-        String descriptParam = " -md " + "(II)V";
-        String methodNameParam = " -mn " + "entryPoint";
-        String nameOfTestParam = " -tn " + "out/ArrayDemoTest1.java";
-        Runtime re = Runtime.getRuntime();
+        final String z3Param = " -z3_path " + z3Path;
+        final String jreParam = " -jre " + jreSourcepath;
+        final String jbseHomeParam = " -jbse_home " + jbseHome;
+        final String testHomeParam = " -test_home " + "C:/Users/andre/IdeaProjects/jbse-examplesxuyna/";
+        final String classParam = " -mc " + "smalldemos/array_3/ArrayDemo3";
+        final String descriptParam = " -md " + "(II)V";
+        final String methodNameParam = " -mn " + "entryPoint";
+        final String nameOfTestParam = " -tn " + "out/ArrayDemoTest1.java";
+        final Runtime re = Runtime.getRuntime();
 
         try {
-            re.exec("java -jar " + jarParam + jbseHomeParam + z3Param + testHomeParam + classParam + descriptParam + methodNameParam + nameOfTestParam + jreParam);
+            re.exec("java -jar " + jarPath + jbseHomeParam + z3Param + testHomeParam + classParam + descriptParam + methodNameParam + nameOfTestParam + jreParam);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
 
     public void start2(){
-        String jarParam = jarPath;
-        String jbseHomeParam = " -jbse_home " + jbseHome;
-        String z3Param = " -z3_path " + z3Path;
-        String testHomeParam = " -test_home " + testHome;
-        String classParam = " -mc " + methodClass;
-        String descriptParam = " -md " + methodDescriptor;
-        String methodNameParam = " -mn " + methodName;
-        String nameOfTestParam = " -tn " + testName;
-        String jreParam = " -jre " + jreSourcepath;
-        Runtime re = Runtime.getRuntime();
+        final String jbseHomeParam = " -jbse_home " + jbseHome;
+        final String z3Param = " -z3_path " + z3Path;
+        final String testHomeParam = " -test_home " + testHome;
+        final String classParam = " -mc " + methodClass;
+        final String descriptParam = " -md " + methodDescriptor;
+        final String methodNameParam = " -mn " + methodName;
+        final String nameOfTestParam = " -tn " + testName;
+        final String jreParam = " -jre " + jreSourcepath;
+        final String fullPath = "java -jar " + jarPath + jbseHomeParam + z3Param + testHomeParam + classParam + descriptParam + methodNameParam + nameOfTestParam + jreParam;
+        final Runtime re = Runtime.getRuntime();
 
         try{
-            re.exec("java -jar " + jarParam + jbseHomeParam + z3Param + testHomeParam+ classParam + descriptParam + methodNameParam+ nameOfTestParam + jreParam);
+            re.exec(fullPath);
         } catch (IOException ioe){
             ioe.printStackTrace();
         }
